@@ -26,7 +26,19 @@
 
   <main>
     <section id="view-overview" class="view"></section>
-    <section id="view-export" class="view" hidden></section>
+    <section id="view-export" class="view" hidden>
+      <div id="export-content"></div>
+      <div class="import-section">
+        <h3>Opdrachtgevers/projecten importeren</h3>
+        <p class="picker-hint">
+          Importeer eenmalig een JSON-bestand met opdrachtgevers en projecten (bijv. vanuit je bestaande overzicht).
+          Namen die al bestaan worden overgeslagen.
+        </p>
+        <input type="file" id="import-file-input" accept="application/json" hidden />
+        <button type="button" id="import-btn" class="link-btn">Bestand kiezen…</button>
+        <p id="import-result" class="picker-hint"></p>
+      </div>
+    </section>
   </main>
 
   <button id="fab" class="fab" type="button" aria-label="Uren loggen">+</button>

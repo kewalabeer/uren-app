@@ -102,8 +102,21 @@ export const db = {
     return all.filter((p) => !p.archived).sort((a, b) => a.name.localeCompare(b.name));
   },
 
+  async findProjectByName(clientId, name) {
+    // Includes archived projects so a re-import can't resurrect/duplicate a finished project.
+    const all = await getAllByIndex('projects', 'clientId', clientId);
+    return all.find((p) => p.name.toLowerCase() === name.toLowerCase()) || null;
+  },
+
   async getProject(id) {
     return getOne('projects', id);
+  },
+
+  async archiveProject(id) {
+    const project = await getOne('projects', id);
+    if (!project) return;
+    project.archived = true;
+    await put('projects', project);
   },
 
   async addProject({ clientId, name, fixedHours }) {

@@ -1,11 +1,12 @@
 import { db } from './db.js';
 import { decimalToHm, isThisMonth } from './util.js';
-import { getRunningTimerInfo, startTicking, stopActiveTimer } from './ui-timer.js';
+import { getRunningTimerInfo, startTicking, startTimerForProject, stopActiveTimer } from './ui-timer.js';
 
 const expandedClients = new Set();
 let cancelTick = null;
 
-export async function renderOverview(container, { onAddProject } = {}) {
+export async function renderOverview(container, options = {}) {
+  const { onAddProject, onQuickManual, onChange } = options;
   container.replaceChildren();
 
   const clients = await db.listClients();
@@ -20,6 +21,8 @@ export async function renderOverview(container, { onAddProject } = {}) {
     container.append(empty, btn);
     return;
   }
+
+  const activeTimer = await db.getActiveTimer();
 
   for (const client of clients) {
     const projects = await db.listProjectsByClient(client.id);
@@ -80,7 +83,51 @@ export async function renderOverview(container, { onAddProject } = {}) {
       const pHours = document.createElement('span');
       pHours.className = 'project-hours';
       pHours.textContent = decimalToHm(allTime);
-      main.append(pName, pHours);
+
+      const actions = document.createElement('div');
+      actions.className = 'project-row-actions';
+
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'row-action-btn';
+      addBtn.textContent = '+';
+      addBtn.title = 'Uren toevoegen';
+      addBtn.setAttribute('aria-label', `Uren toevoegen voor ${project.name}`);
+      addBtn.addEventListener('click', () => onQuickManual && onQuickManual(project));
+
+      const isRunning = Boolean(activeTimer && activeTimer.projectId === project.id);
+      const timerBtn = document.createElement('button');
+      timerBtn.type = 'button';
+      timerBtn.className = `row-action-btn ${isRunning ? 'stop' : 'play'}`;
+      timerBtn.textContent = isRunning ? '■' : '▶';
+      timerBtn.title = isRunning ? 'Timer stoppen' : 'Timer starten';
+      timerBtn.setAttribute('aria-label', `${timerBtn.title} voor ${project.name}`);
+      timerBtn.addEventListener('click', async () => {
+        if (isRunning) {
+          await stopActiveTimer();
+        } else {
+          await startTimerForProject(project.id);
+        }
+        onChange && onChange();
+      });
+
+      const archiveBtn = document.createElement('button');
+      archiveBtn.type = 'button';
+      archiveBtn.className = 'row-action-btn archive';
+      archiveBtn.textContent = '⋯';
+      archiveBtn.title = 'Project afronden';
+      archiveBtn.setAttribute('aria-label', `Project afronden: ${project.name}`);
+      archiveBtn.addEventListener('click', async () => {
+        const ok = confirm(
+          `"${project.name}" afronden? Het project verdwijnt uit dit overzicht en uit toekomstige imports. Gelogde uren blijven bewaard.`
+        );
+        if (!ok) return;
+        await db.archiveProject(project.id);
+        onChange && onChange();
+      });
+
+      actions.append(addBtn, timerBtn, archiveBtn);
+      main.append(pName, pHours, actions);
       row.append(main);
 
       if (project.fixedHours != null && project.fixedHours > 0) {
@@ -114,7 +161,7 @@ export async function renderOverview(container, { onAddProject } = {}) {
       } else {
         expandedClients.add(client.id);
       }
-      renderOverview(container, { onAddProject });
+      renderOverview(container, options);
     });
 
     card.append(header, projectList);

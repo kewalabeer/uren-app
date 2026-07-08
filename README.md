@@ -22,13 +22,18 @@ De site bevat alleen app-code (HTML/CSS/JS) en is dus publiek benaderbaar via de
 
 ## Gebruik
 
-- **Hoofdoverzicht**: opdrachtgevers, uitklapbaar naar projecten met uren en (indien van toepassing) een voortgangsbalk t.o.v. het vaste aantal uren.
-- **+ knop**: uren loggen, met een schuifknop boven in het invoerscherm:
-  - *Timer*: kies een project om een timer te starten (loopt door, ook na herstarten van de app); een lopende timer staat altijd zichtbaar bovenaan met een Stop-knop.
-  - *Handmatig*: kies een project en vul uren + minuten in.
+- **Hoofdoverzicht**: opdrachtgevers, uitklapbaar naar projecten met uren en (indien van toepassing) een voortgangsbalk t.o.v. het vaste aantal uren. Elk project heeft drie snelknoppen:
+  - **+** : direct handmatig uren toevoegen voor dát project (uren + minuten), zonder eerst een project te hoeven kiezen.
+  - **▶ / ■** : timer direct starten/stoppen voor dát project. Er kan maar één timer tegelijk lopen — starten van een andere stopt de vorige automatisch. Een lopende timer staat ook altijd zichtbaar bovenaan (sticky balkje) met een eigen Stop-knop.
+  - **⋯** : project afronden/archiveren. Vraagt om bevestiging; het project verdwijnt daarna uit het overzicht en telt niet meer mee bij een import (de gelogde uren blijven gewoon bewaard en tellen mee in exports).
+- **+ knop (zwevend, rechtsonder)**: hetzelfde uren loggen, maar met een schuifknop Timer/Handmatig en een project-kiezer — handig voor een project dat niet in de "recent gebruikt"-lijst staat.
 - **+ nieuw project** (onder elke opdrachtgever, of via de lege-staat-knop): projectnaam, optioneel vast aantal uren, en zo nodig een nieuwe opdrachtgever inline.
 - **Exporteren-tab**: laat niet-geëxporteerde regels zien; "Exporteer" bouwt een JSON-bestand van alleen die nieuwe regels en opent het deelmenu van je telefoon. Kies daar **Google Drive** om het bestand op te slaan in de map die gekoppeld is aan je Claude-project — Claude leest het bestand vandaar in plaats van de whiteboard-foto en werkt de Excel-sheet bij.
 - Kwam een export niet aan? Gebruik "Her-exporteer laatste 30 dagen" als herstel-optie.
+- **Importeren** (onderaan de Exporteren-tab): eenmalig een JSON-bestand met opdrachtgevers en projecten inladen, bijv. vanuit een bestaand Excel-overzicht. Bestaande namen (op opdrachtgever + project) worden overgeslagen, dus opnieuw importeren is veilig. Bestandsformaat:
+  ```json
+  { "clients": [ { "name": "Opdrachtgever", "projects": ["Project A", "Project B"] } ] }
+  ```
 
 ## Huisstijl
 

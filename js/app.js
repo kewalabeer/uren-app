@@ -1,10 +1,12 @@
 import { renderOverview, renderTimerBanner } from './ui-overview.js';
-import { initLogEntrySheet, openLogEntrySheet } from './ui-log-entry.js';
+import { initLogEntrySheet, openLogEntrySheet, openManualEntryForProject } from './ui-log-entry.js';
 import { initAddProjectSheet, openAddProjectSheet } from './ui-add-project.js';
 import { renderExportView, refreshExportBadge } from './export.js';
+import { initImportSection } from './ui-import.js';
 
 const overviewEl = document.getElementById('view-overview');
 const exportEl = document.getElementById('view-export');
+const exportContentEl = document.getElementById('export-content');
 const timerBannerEl = document.getElementById('timer-banner');
 const exportBadgeEl = document.getElementById('export-badge');
 const fabEl = document.getElementById('fab');
@@ -13,11 +15,15 @@ const addProjectDialog = document.getElementById('add-project-dialog');
 const tabButtons = document.querySelectorAll('.tab-btn');
 
 async function refreshAll() {
-  await renderOverview(overviewEl, { onAddProject: (clientId) => openAddProjectSheet(clientId) });
+  await renderOverview(overviewEl, {
+    onAddProject: (clientId) => openAddProjectSheet(clientId),
+    onQuickManual: (project) => openManualEntryForProject(project),
+    onChange: refreshAll,
+  });
   await renderTimerBanner(timerBannerEl, { onStopped: refreshAll });
   await refreshExportBadge(exportBadgeEl);
   if (!exportEl.hidden) {
-    await renderExportView(exportEl, { onExported: refreshAll });
+    await renderExportView(exportContentEl, { onExported: refreshAll });
   }
 }
 
@@ -27,7 +33,7 @@ function switchView(view) {
   fabEl.hidden = view !== 'overview';
   tabButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.view === view));
   if (view === 'export') {
-    renderExportView(exportEl, { onExported: refreshAll });
+    renderExportView(exportContentEl, { onExported: refreshAll });
   }
 }
 
@@ -39,6 +45,7 @@ fabEl.addEventListener('click', () => openLogEntrySheet());
 
 initLogEntrySheet(logEntryDialog, { onChange: refreshAll });
 initAddProjectSheet(addProjectDialog, { onChange: refreshAll });
+initImportSection({ onImported: refreshAll });
 
 refreshAll();
 

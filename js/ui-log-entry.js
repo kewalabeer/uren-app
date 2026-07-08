@@ -283,3 +283,14 @@ export async function openLogEntrySheet() {
   await renderBody();
   dialogEl.showModal();
 }
+
+export function openManualEntryForProject(project) {
+  mode = 'manual';
+  localStorage.setItem(LAST_MODE_KEY, mode);
+  pickedProject = project;
+  dialogEl.querySelectorAll('.mode-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  renderManualForm();
+  dialogEl.showModal();
+}
