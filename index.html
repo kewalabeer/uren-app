@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Uren</title>
+  <meta name="theme-color" content="#2f6e73" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Uren</h1>
+    <nav class="tabs">
+      <button type="button" class="tab-btn active" data-view="overview">Overzicht</button>
+      <button type="button" class="tab-btn" data-view="export">
+        Exporteren
+        <span id="export-badge" class="badge" hidden></span>
+      </button>
+    </nav>
+  </header>
+
+  <div id="timer-banner" class="timer-banner" hidden></div>
+
+  <main>
+    <section id="view-overview" class="view"></section>
+    <section id="view-export" class="view" hidden></section>
+  </main>
+
+  <button id="fab" class="fab" type="button" aria-label="Uren loggen">+</button>
+
+  <dialog id="log-entry-dialog" class="sheet">
+    <div class="sheet-header">
+      <h2>Uren loggen</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Sluiten">&times;</button>
+    </div>
+    <div class="mode-toggle">
+      <button type="button" class="mode-btn" data-mode="timer">Timer</button>
+      <button type="button" class="mode-btn" data-mode="manual">Handmatig</button>
+    </div>
+    <div id="log-entry-body"></div>
+  </dialog>
+
+  <dialog id="add-project-dialog" class="sheet">
+    <form id="add-project-form" class="sheet-form">
+      <div class="sheet-header">
+        <h2>Nieuw project</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Sluiten">&times;</button>
+      </div>
+      <label class="field">
+        Opdrachtgever
+        <select id="ap-client-select"></select>
+      </label>
+      <label class="field" id="ap-new-client-field" hidden>
+        Naam nieuwe opdrachtgever
+        <input type="text" id="ap-new-client-name" />
+      </label>
+      <label class="field">
+        Projectnaam
+        <input type="text" id="ap-project-name" required />
+      </label>
+      <label class="field">
+        Vast aantal uren (optioneel)
+        <input type="number" id="ap-fixed-hours" min="0" step="0.5" />
+      </label>
+      <button type="submit" class="btn-primary">Opslaan</button>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
