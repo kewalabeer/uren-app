@@ -3,6 +3,8 @@ import { initLogEntrySheet, openLogEntrySheet, openManualEntryForProject } from 
 import { initAddProjectSheet, openAddProjectSheet } from './ui-add-project.js';
 import { renderExportView, refreshExportBadge } from './export.js';
 import { initImportSection } from './ui-import.js';
+import { initTimerConfirmDialog } from './ui-timer.js';
+import { initEntriesSheet, openEntriesForProject } from './ui-entries.js';
 
 const overviewEl = document.getElementById('view-overview');
 const exportEl = document.getElementById('view-export');
@@ -12,12 +14,15 @@ const exportBadgeEl = document.getElementById('export-badge');
 const fabEl = document.getElementById('fab');
 const logEntryDialog = document.getElementById('log-entry-dialog');
 const addProjectDialog = document.getElementById('add-project-dialog');
+const timerConfirmDialog = document.getElementById('timer-confirm-dialog');
+const entriesDialog = document.getElementById('entries-dialog');
 const tabButtons = document.querySelectorAll('.tab-btn');
 
 async function refreshAll() {
   await renderOverview(overviewEl, {
     onAddProject: (clientId) => openAddProjectSheet(clientId),
     onQuickManual: (project) => openManualEntryForProject(project),
+    onOpenEntries: (project) => openEntriesForProject(project),
     onChange: refreshAll,
   });
   await renderTimerBanner(timerBannerEl, { onStopped: refreshAll });
@@ -46,6 +51,8 @@ fabEl.addEventListener('click', () => openLogEntrySheet());
 initLogEntrySheet(logEntryDialog, { onChange: refreshAll });
 initAddProjectSheet(addProjectDialog, { onChange: refreshAll });
 initImportSection({ onImported: refreshAll });
+initTimerConfirmDialog(timerConfirmDialog);
+initEntriesSheet(entriesDialog, { onChange: refreshAll });
 
 refreshAll();
 

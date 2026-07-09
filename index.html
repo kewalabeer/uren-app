@@ -81,6 +81,34 @@
     </form>
   </dialog>
 
+  <dialog id="timer-confirm-dialog" class="sheet">
+    <div class="sheet-header">
+      <h2>Timer stoppen</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Sluiten">&times;</button>
+    </div>
+    <p class="picker-hint" id="timer-confirm-hint"></p>
+    <div class="hm-row">
+      <label class="field">
+        Uren
+        <input type="number" id="timer-confirm-hours" min="0" inputmode="numeric" />
+      </label>
+      <label class="field">
+        Minuten
+        <input type="number" id="timer-confirm-minutes" min="0" max="59" inputmode="numeric" />
+      </label>
+    </div>
+    <button type="button" id="timer-confirm-save" class="btn-primary">Opslaan</button>
+    <button type="button" id="timer-confirm-discard" class="link-btn">Verwijderen (niet loggen)</button>
+  </dialog>
+
+  <dialog id="entries-dialog" class="sheet">
+    <div class="sheet-header">
+      <h2 id="entries-dialog-title">Regels</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Sluiten">&times;</button>
+    </div>
+    <div id="entries-list"></div>
+  </dialog>
+
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

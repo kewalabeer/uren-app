@@ -1,4 +1,4 @@
-const CACHE_NAME = 'urenapp-shell-v4';
+const CACHE_NAME = 'urenapp-shell-v5';
 const SHELL_FILES = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const SHELL_FILES = [
   './js/ui-add-project.js',
   './js/export.js',
   './js/ui-import.js',
+  './js/ui-entries.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './fonts/montserrat-700.woff2',

@@ -161,6 +161,18 @@ export const db = {
     return all.filter((e) => !e.exportedAt).sort((a, b) => a.date.localeCompare(b.date));
   },
 
+  async updateEntry(id, changes) {
+    const entry = await getOne('entries', id);
+    if (!entry) return null;
+    Object.assign(entry, changes);
+    await put('entries', entry);
+    return entry;
+  },
+
+  async deleteEntry(id) {
+    await remove('entries', id);
+  },
+
   async markExported(entryIds, exportedAt) {
     for (const id of entryIds) {
       const entry = await getOne('entries', id);
@@ -203,11 +215,11 @@ export const db = {
     return stoppedEntry;
   },
 
-  async stopTimer(note) {
+  async stopTimer(note, hoursOverride) {
     const existing = await this.getActiveTimer();
     if (!existing) return null;
     const elapsedMs = Date.now() - new Date(existing.startedAt).getTime();
-    const hours = elapsedMs / 3600000;
+    const hours = hoursOverride != null ? hoursOverride : elapsedMs / 3600000;
     const entry = await this.addEntry({
       projectId: existing.projectId,
       date: todayStr(),
@@ -217,5 +229,9 @@ export const db = {
     });
     await remove('activeTimer', 'current');
     return entry;
+  },
+
+  async discardTimer() {
+    await remove('activeTimer', 'current');
   },
 };

@@ -6,7 +6,7 @@ const expandedClients = new Set();
 let cancelTick = null;
 
 export async function renderOverview(container, options = {}) {
-  const { onAddProject, onQuickManual, onChange } = options;
+  const { onAddProject, onQuickManual, onChange, onOpenEntries } = options;
   container.replaceChildren();
 
   const clients = await db.listClients();
@@ -77,9 +77,12 @@ export async function renderOverview(container, options = {}) {
 
       const main = document.createElement('div');
       main.className = 'project-row-main';
-      const pName = document.createElement('span');
+      const pName = document.createElement('button');
+      pName.type = 'button';
       pName.className = 'project-name';
       pName.textContent = project.name;
+      pName.title = 'Bekijk/wijzig regels';
+      pName.addEventListener('click', () => onOpenEntries && onOpenEntries(project));
       const pHours = document.createElement('span');
       pHours.className = 'project-hours';
       pHours.textContent = decimalToHm(allTime);

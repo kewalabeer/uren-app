@@ -187,6 +187,13 @@ main { padding: 0.75rem; }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
 }
 
 .project-hours { color: var(--text-muted); flex-shrink: 0; }
@@ -405,3 +412,41 @@ main { padding: 0.75rem; }
   font-size: 1rem;
   margin: 0 0 0.4rem;
 }
+
+.entry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.entry-row:last-child { border-bottom: none; }
+
+.entry-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.entry-row-main { font-weight: 600; }
+.entry-row-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entry-row-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.entry-edit-form { width: 100%; }
+.entry-edit-form .btn-primary { width: 100%; margin-top: 0.25rem; }
+
+#timer-confirm-dialog .btn-primary { width: 100%; margin-top: 0.5rem; }
