@@ -14,6 +14,10 @@ export function isThisMonth(dateStr) {
   return y === today.getFullYear() && m === today.getMonth() + 1;
 }
 
+export function isToday(dateStr) {
+  return dateStr === todayStr();
+}
+
 // hours+minutes -> decimal hours
 export function hmToDecimal(hours, minutes) {
   return (Number(hours) || 0) + (Number(minutes) || 0) / 60;

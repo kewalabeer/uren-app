@@ -1,5 +1,5 @@
 import { db } from './db.js';
-import { decimalToHm, isThisMonth } from './util.js';
+import { decimalToHm, isThisMonth, isToday } from './util.js';
 import { getRunningTimerInfo, startTicking, startTimerForProject, stopActiveTimer } from './ui-timer.js';
 
 const expandedClients = new Set();
@@ -28,12 +28,15 @@ export async function renderOverview(container, options = {}) {
     const projects = await db.listProjectsByClient(client.id);
     const projectStats = [];
     let clientMonthTotal = 0;
+    let clientTodayTotal = 0;
 
     for (const project of projects) {
       const entries = await db.listEntriesByProject(project.id);
       const allTime = entries.reduce((sum, e) => sum + e.hours, 0);
       const thisMonth = entries.reduce((sum, e) => (isThisMonth(e.date) ? sum + e.hours : sum), 0);
+      const today = entries.reduce((sum, e) => (isToday(e.date) ? sum + e.hours : sum), 0);
       clientMonthTotal += thisMonth;
+      clientTodayTotal += today;
       projectStats.push({ project, allTime, thisMonth });
     }
 
@@ -52,7 +55,9 @@ export async function renderOverview(container, options = {}) {
 
     const subEl = document.createElement('span');
     subEl.className = 'client-sub';
-    subEl.textContent = `${decimalToHm(clientMonthTotal)} deze maand`;
+    subEl.textContent = isExpanded
+      ? `${decimalToHm(clientMonthTotal)} deze maand`
+      : `${decimalToHm(clientTodayTotal)} vandaag`;
 
     const chevron = document.createElement('span');
     chevron.className = 'chevron';
