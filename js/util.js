@@ -18,6 +18,21 @@ export function isToday(dateStr) {
   return dateStr === todayStr();
 }
 
+// ISO week: Monday through Sunday.
+export function isThisWeek(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+
+  const now = new Date();
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffToMonday = (startOfWeek.getDay() + 6) % 7;
+  startOfWeek.setDate(startOfWeek.getDate() - diffToMonday);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+  return date >= startOfWeek && date < endOfWeek;
+}
+
 // hours+minutes -> decimal hours
 export function hmToDecimal(hours, minutes) {
   return (Number(hours) || 0) + (Number(minutes) || 0) / 60;

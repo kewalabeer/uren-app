@@ -22,6 +22,7 @@ De site bevat alleen app-code (HTML/CSS/JS) en is dus publiek benaderbaar via de
 
 ## Gebruik
 
+- **Header**: logo links van de titel, en rechtsboven het totaal aantal gelogde uren **deze week** (maandag t/m zondag), over alle opdrachtgevers/projecten heen.
 - **Hoofdoverzicht**: opdrachtgevers, ingeklapt met de uren van **vandaag** als subtitel; uitgeklapt toont dezelfde subtitel het totaal **deze maand** in plaats daarvan. Uitklappen laat de projecten zien met uren en (indien van toepassing) een voortgangsbalk t.o.v. het vaste aantal uren. Elk project heeft drie snelknoppen:
   - **+** : direct handmatig uren toevoegen voor dát project (uren + minuten), zonder eerst een project te hoeven kiezen.
   - **▶ / ■** : timer direct starten/stoppen voor dát project. Er kan maar één timer tegelijk lopen — starten van een andere stopt de vorige automatisch. Een lopende timer staat ook altijd zichtbaar bovenaan (sticky balkje) met een eigen Stop-knop. Loopt een timer langer dan 4 uur, dan vraagt de app bij het stoppen om de duur te bevestigen (en zo nodig aan te passen) voordat 'm als regel wordt opgeslagen — vangt "timer vergeten te stoppen" op.

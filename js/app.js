@@ -1,4 +1,4 @@
-import { renderOverview, renderTimerBanner } from './ui-overview.js';
+import { renderOverview, renderTimerBanner, renderWeekTotal } from './ui-overview.js';
 import { initLogEntrySheet, openLogEntrySheet, openManualEntryForProject } from './ui-log-entry.js';
 import { initAddProjectSheet, openAddProjectSheet } from './ui-add-project.js';
 import { renderExportView, refreshExportBadge } from './export.js';
@@ -16,6 +16,7 @@ const logEntryDialog = document.getElementById('log-entry-dialog');
 const addProjectDialog = document.getElementById('add-project-dialog');
 const timerConfirmDialog = document.getElementById('timer-confirm-dialog');
 const entriesDialog = document.getElementById('entries-dialog');
+const weekTotalEl = document.getElementById('week-total');
 const tabButtons = document.querySelectorAll('.tab-btn');
 
 async function refreshAll() {
@@ -26,6 +27,7 @@ async function refreshAll() {
     onChange: refreshAll,
   });
   await renderTimerBanner(timerBannerEl, { onStopped: refreshAll });
+  await renderWeekTotal(weekTotalEl);
   await refreshExportBadge(exportBadgeEl);
   if (!exportEl.hidden) {
     await renderExportView(exportContentEl, { onExported: refreshAll });

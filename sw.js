@@ -1,4 +1,4 @@
-const CACHE_NAME = 'urenapp-shell-v6';
+const CACHE_NAME = 'urenapp-shell-v7';
 const SHELL_FILES = [
   './',
   './index.html',
@@ -16,6 +16,7 @@ const SHELL_FILES = [
   './js/ui-entries.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/logo-mark.png',
   './fonts/montserrat-700.woff2',
   './fonts/poppins-600.woff2',
   './fonts/lato-400.woff2',
@@ -23,7 +24,16 @@ const SHELL_FILES = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL_FILES)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE_NAME)
+      .then((cache) =>
+        // Fetch with cache: 'reload' so a stale HTTP disk cache entry can't sneak
+        // an old file into a fresh install (cache.addAll alone doesn't bypass it).
+        Promise.all(
+          SHELL_FILES.map((url) => fetch(url, { cache: 'reload' }).then((response) => cache.put(url, response)))
+        )
+      )
+      .then(() => self.skipWaiting())
   );
 });
 

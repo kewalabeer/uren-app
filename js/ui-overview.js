@@ -1,9 +1,15 @@
 import { db } from './db.js';
-import { decimalToHm, isThisMonth, isToday } from './util.js';
+import { decimalToHm, isThisMonth, isThisWeek, isToday } from './util.js';
 import { getRunningTimerInfo, startTicking, startTimerForProject, stopActiveTimer } from './ui-timer.js';
 
 const expandedClients = new Set();
 let cancelTick = null;
+
+export async function renderWeekTotal(el) {
+  const entries = await db.listAllEntries();
+  const total = entries.reduce((sum, e) => (isThisWeek(e.date) ? sum + e.hours : sum), 0);
+  el.textContent = `Week: ${decimalToHm(total)}`;
+}
 
 export async function renderOverview(container, options = {}) {
   const { onAddProject, onQuickManual, onChange, onOpenEntries } = options;
