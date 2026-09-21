@@ -11,6 +11,7 @@ let mode = localStorage.getItem(LAST_MODE_KEY) || 'manual';
 let pickedProject = null;
 let showingFullPicker = false;
 let cancelTick = null;
+let presetDate = null; // set when opened from the week view for a specific day
 
 function stopTicking() {
   if (cancelTick) {
@@ -169,7 +170,7 @@ function renderManualForm() {
   dateLabel.append('Datum');
   const dateInput = document.createElement('input');
   dateInput.type = 'date';
-  dateInput.value = todayStr();
+  dateInput.value = presetDate || todayStr();
   dateLabel.append(dateInput);
 
   const hmRow = document.createElement('div');
@@ -274,17 +275,24 @@ export function initLogEntrySheet(dialog, { onChange } = {}) {
   });
 
   dialog.querySelector('[data-close]').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => stopTicking());
+  dialog.addEventListener('close', () => {
+    stopTicking();
+    presetDate = null;
+  });
 }
 
-export async function openLogEntrySheet() {
+// With { date }, opens in manual mode with that day prefilled (a timer can't log a past day).
+export async function openLogEntrySheet({ date } = {}) {
   pickedProject = null;
   showingFullPicker = false;
+  presetDate = date || null;
+  if (presetDate) mode = 'manual';
   await renderBody();
   dialogEl.showModal();
 }
 
 export function openManualEntryForProject(project) {
+  presetDate = null;
   mode = 'manual';
   localStorage.setItem(LAST_MODE_KEY, mode);
   pickedProject = project;

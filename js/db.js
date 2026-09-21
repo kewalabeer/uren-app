@@ -77,6 +77,11 @@ export const db = {
     return all.filter((c) => !c.archived).sort((a, b) => a.name.localeCompare(b.name));
   },
 
+  // Includes archived clients: history (e.g. the week view) still needs their names.
+  async listAllClients() {
+    return getAll('clients');
+  },
+
   async addClient({ name }) {
     const client = { id: uuid(), name, createdAt: new Date().toISOString(), archived: false };
     return put('clients', client);
@@ -95,6 +100,11 @@ export const db = {
   async listProjects() {
     const all = await getAll('projects');
     return all.filter((p) => !p.archived);
+  },
+
+  // Includes archived (afgeronde) projects: their logged hours still belong in history views.
+  async listAllProjects() {
+    return getAll('projects');
   },
 
   async listProjectsByClient(clientId) {

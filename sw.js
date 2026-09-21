@@ -1,4 +1,4 @@
-const CACHE_NAME = 'urenapp-shell-v7';
+const CACHE_NAME = 'urenapp-shell-v8';
 const SHELL_FILES = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const SHELL_FILES = [
   './js/export.js',
   './js/ui-import.js',
   './js/ui-entries.js',
+  './js/ui-week.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/logo-mark.png',

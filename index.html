@@ -21,6 +21,7 @@
     </div>
     <nav class="tabs">
       <button type="button" class="tab-btn active" data-view="overview">Overzicht</button>
+      <button type="button" class="tab-btn" data-view="week">Week</button>
       <button type="button" class="tab-btn" data-view="export">
         Exporteren
         <span id="export-badge" class="badge" hidden></span>
@@ -32,6 +33,7 @@
 
   <main>
     <section id="view-overview" class="view"></section>
+    <section id="view-week" class="view" hidden></section>
     <section id="view-export" class="view" hidden>
       <div id="export-content"></div>
       <div class="import-section">

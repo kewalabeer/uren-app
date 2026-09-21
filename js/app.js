@@ -5,8 +5,10 @@ import { renderExportView, refreshExportBadge } from './export.js';
 import { initImportSection } from './ui-import.js';
 import { initTimerConfirmDialog } from './ui-timer.js';
 import { initEntriesSheet, openEntriesForProject } from './ui-entries.js';
+import { renderWeekView, resetWeekView } from './ui-week.js';
 
 const overviewEl = document.getElementById('view-overview');
+const weekEl = document.getElementById('view-week');
 const exportEl = document.getElementById('view-export');
 const exportContentEl = document.getElementById('export-content');
 const timerBannerEl = document.getElementById('timer-banner');
@@ -29,16 +31,31 @@ async function refreshAll() {
   await renderTimerBanner(timerBannerEl, { onStopped: refreshAll });
   await renderWeekTotal(weekTotalEl);
   await refreshExportBadge(exportBadgeEl);
+  if (!weekEl.hidden) {
+    await renderWeek();
+  }
   if (!exportEl.hidden) {
     await renderExportView(exportContentEl, { onExported: refreshAll });
   }
 }
 
+function renderWeek() {
+  return renderWeekView(weekEl, {
+    onOpenEntries: (project) => openEntriesForProject(project),
+    onAddForDate: (date) => openLogEntrySheet({ date }),
+  });
+}
+
 function switchView(view) {
   overviewEl.hidden = view !== 'overview';
+  weekEl.hidden = view !== 'week';
   exportEl.hidden = view !== 'export';
   fabEl.hidden = view !== 'overview';
   tabButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.view === view));
+  if (view === 'week') {
+    resetWeekView();
+    renderWeek();
+  }
   if (view === 'export') {
     renderExportView(exportContentEl, { onExported: refreshAll });
   }
